@@ -59,22 +59,23 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
-const displayMovements = function (movements) {
-  // setting the innerHTML to empty string will delete the previous elements
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = "";
-  movements.forEach(function (mov, i) {
+
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? "deposit" : "withdrawal";
 
-    // html element that is going to be added
     const html = `
-    <div class="movements__row">
-      <div class="movements__type movements__type--${type}">${
+      <div class="movements__row">
+        <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-      <div class="movements__value">${mov}€</div>
-    </div>;`;
+        <div class="movements__value">${mov}€</div>
+      </div>
+    `;
 
-    // insertAdjacentHTML is one of methods used to create html elements. It receive a string which is the part where the code is going to be added (afterbegin, beforeend, etc) and the actual html code that needs to be added
     containerMovements.insertAdjacentHTML("afterbegin", html);
   });
 };
@@ -212,4 +213,15 @@ btnLoan.addEventListener("click", function (e) {
   }
 
   inputLoanAmount.value = "";
+});
+
+// state variable
+let sorted = false;
+btnSort.addEventListener("click", function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  btnSort.innerHTML = sorted ? "&darr; SORT" : "&uarr; UNSORT";
+  btnSort.style.color = "black";
+  // setting the variable sorted to its opposite
+  sorted = !sorted;
 });
