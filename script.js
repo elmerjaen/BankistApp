@@ -194,3 +194,22 @@ btnClose.addEventListener("click", function (e) {
   }
   inputCloseUsername.value = inputClosePin.value = "";
 });
+
+btnLoan.addEventListener("click", function (e) {
+  e.preventDefault();
+  const amountRequested = Number(inputLoanAmount.value);
+
+  const loanApproval = currentAccount.movements.some(
+    (amount) => amount > amountRequested * 0.1
+  );
+
+  if (amountRequested > 0 && loanApproval) {
+    // Adding movement
+    currentAccount.movements.push(amountRequested);
+
+    // Updating UI
+    updateUI(currentAccount);
+  }
+
+  inputLoanAmount.value = "";
+});
